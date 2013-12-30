@@ -1,0 +1,1 @@
+<script src="~/modulesfiles/content/main.js"></script>

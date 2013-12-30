@@ -6,6 +6,10 @@ class ContentController extends ModuleController
 	{
 		return $this->_partial();
 	}
+	public function importPublic()
+	{
+		return $this->_partial();
+	}
 
 	public function admin_setup()
 	{
@@ -23,7 +27,10 @@ class ContentController extends ModuleController
 			$files = array(
 				'js/ckeditor/plugins/orangocontent/plugin.js',
 				'js/ckeditor/plugins/orangocontent/img/image.png',
-				'modulesfiles/content/main.js'
+				'js/ckeditor/plugins/orangocontent/img/tube.png',
+				'js/jquery.tube.min.js',
+				'modulesfiles/content/main.js',
+				'modulesfiles/content/public.js',
 			);
 
 			foreach ($folders as $folder) 

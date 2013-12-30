@@ -7,5 +7,9 @@ class ContentModuleRegister
 			'controller' => 'Content',
 			'action' => 'importHead'
 		),
+		ModuleComposer::PUBLIC_BODY_ADDS => array(
+			'controller' => 'Content',
+			'action' => 'importPublic'
+		),
 	);
 }

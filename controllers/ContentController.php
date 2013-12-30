@@ -28,7 +28,7 @@ class ContentController extends ModuleController
 				'js/ckeditor/plugins/orangocontent/plugin.js',
 				'js/ckeditor/plugins/orangocontent/img/image.png',
 				'js/ckeditor/plugins/orangocontent/img/tube.png',
-				'js/jquery.tube.min.js',
+				'js/jquery.tubeplayer.min.js',
 				'modulesfiles/content/main.js',
 				'modulesfiles/content/public.js',
 			);

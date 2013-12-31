@@ -16,4 +16,6 @@ $(document).ready(function(){
 			onUnMute: function(){} // after the player is unmuted
 		});
 	});
+
+	$('.orango-content-gallery').fancybox();
 });

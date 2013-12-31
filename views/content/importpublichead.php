@@ -1,0 +1,1 @@
+<link href="~/js/fancybox/jquery.fancybox.css" rel="stylesheet">

@@ -1,5 +1,5 @@
 window.onload = function(){
-	var ckeditorAdd = { name: 'orangocontent', items : [ 'orangoContentImageUpload', 'orangoContentTube'] };
+	var ckeditorAdd = { name: 'orangocontent', items : [ 'orangoContentImageUpload', 'orangoContentGalleryUpload', 'orangoContentTube'] };
 
 	ckeditorConfig.toolbar_Post.push(ckeditorAdd);
 	ckeditorConfig.toolbar_Page.push(ckeditorAdd);
@@ -11,4 +11,5 @@ window.onload = function(){
 	}
 
 	ckeditorConfig.forceEnterMode = true;
+	ckeditorConfig.extraAllowedContent = 'div span a img';
 };

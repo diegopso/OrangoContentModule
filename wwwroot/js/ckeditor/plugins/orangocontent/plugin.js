@@ -1,6 +1,14 @@
 var currentEditor = null;
+var $orangoContentgallery = null;
 CKEDITOR.plugins.add('orangocontent',{
 	init: function(editor){
+		editor.setData('');
+
+		setTimeout(function(){
+			var element = CKEDITOR.dom.element.createFromHtml('<div>' + $('#OriginalContent').html() + '</div>');
+			editor.insertElement(element);
+		}, 500);
+
 		var modalImageHtml = '<div id="orango-content-image-upload-modal" class="modal hide fade">'+
 								'<div class="modal-header">'+
 									'<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
@@ -14,6 +22,22 @@ CKEDITOR.plugins.add('orangocontent',{
 								'<div class="modal-footer">'+
 									'<a href="javascript:void(0);" class="btn" data-dismiss="modal">Cancelar</a>'+
 									'<a href="javascript:void(0);" onclick="orangoContentImageUpload(this)" class="btn btn-primary">Enviar</a>'+
+								'</div>'+
+							'</div>';
+
+		var modalGalleryHtml = '<div id="orango-content-gallery-upload-modal" class="modal hide fade">'+
+								'<div class="modal-header">'+
+									'<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+									'<h3>Adicionar Galeria</h3>'+
+								'</div>'+
+								'<div class="modal-body">'+
+									'<form method="POST" action="'+ ROOT +'admin/content/galleryUpload/" enctype="multipart/form-data">'+
+										'<div id="orango-content-multiple-file-uploader-container">Enviar</div>'+
+									'</form>'+
+								'</div>'+
+								'<div class="modal-footer">'+
+									'<a href="javascript:void(0);" class="btn" data-dismiss="modal">Cancelar</a>'+
+									'<a href="javascript:void(0);" onclick="orangoContentGallery(this)" data-dismiss="modal" class="btn btn-primary">Adicionar</a>'+
 								'</div>'+
 							'</div>';
 
@@ -58,6 +82,26 @@ CKEDITOR.plugins.add('orangocontent',{
 	    }, "Informe uma url válida."); 
 
 		$(modalImageHtml).appendTo('body');
+
+		var gId = (Math.ceil(Math.random() * 100000)).toString();
+		$orangoContentgallery = $('<div class="orango-content-gallery-container"></div>');
+		$(modalGalleryHtml).appendTo('body')
+		.find('#orango-content-multiple-file-uploader-container').uploadFile({
+		    url: ROOT + 'admin/content/galleryUpload/' + gId,
+		    dragDrop: true,
+		    fileName: "Gallery",
+		    allowedTypes:"jpg,png",	
+		    returnType:"json",
+			onSuccess:function(files,data,xhr)
+		    {
+		       if(data.d.error){
+		       		alert(data.d.error);
+		       }else{
+		       		$orangoContentgallery.append('<a class="orango-content-gallery" rel="'+ gId +'" href="'+ data.d.path +'"><img src="'+ data.d.miniaturePath +'" alt=""/></a>');
+		       }
+		    },
+		});
+
 		$(modalTubeHtml).appendTo('body').find('form').validate({
 			rules: {
 				OrangoContentTubeUrl: {
@@ -103,6 +147,13 @@ CKEDITOR.plugins.add('orangocontent',{
 			}
 		});
 
+		editor.addCommand('orangoContentGalleryUpload',{
+			exec : function(editor){    
+				currentEditor = editor;
+				$('#orango-content-gallery-upload-modal').modal('show');
+			}
+		});
+
 		editor.ui.addButton('orangoContentImageUpload',{
 			label: 'Adicionar Imagem',
 			command: 'orangoContentImageUpload',
@@ -113,6 +164,12 @@ CKEDITOR.plugins.add('orangocontent',{
 			label: 'Adicionar Vídeo',
 			command: 'orangoContentTube',
 			icon: this.path + 'img/tube.png'
+		});
+
+		editor.ui.addButton('orangoContentGalleryUpload',{
+			label: 'Adicionar Galeria',
+			command: 'orangoContentGalleryUpload',
+			icon: this.path + 'img/gallery.png'
 		});
 	}
 });
@@ -146,5 +203,12 @@ function orangoContentTube(a)
 	var h = modal.find('#OrangoContentTubeHeight').val();
 
 	var element = CKEDITOR.dom.element.createFromHtml('<span class="orango-content-youtube-player" player-video="'+video+'" player-width="'+w+'" player-height="'+h+'">Video: '+url+'</span>');
+	currentEditor.insertElement(element);
+}
+
+function orangoContentGallery(a)
+{
+	var modal = $(a).closest('.modal');
+	var element = CKEDITOR.dom.element.createFromHtml('<p>' + $orangoContentgallery.html() + '</p>');
 	currentEditor.insertElement(element);
 }
